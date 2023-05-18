@@ -1,0 +1,270 @@
+Project School {
+  database_type: 'MySQL'
+  Note: '''
+    # GI-KACE Mobile App and student system Database
+    **Database Documentation**
+  '''
+}
+
+
+Table students{
+  id int [pk, increment]
+  first_name varchar(255)
+  last_name varchar(255)
+  other_name varchar(255)
+  student_id varchar(255)
+  user_id varchar(255)
+  batch_id int
+  contact varchar(255)
+  date_of_birth date
+  gender varchar(255)
+  fees varchar(255)
+  status varchar(255)
+  deleted_at timestamp
+  created_at timestamp
+  updated_at timestamp
+  note: "table 'students' contains students information"
+}
+
+
+Table batches{
+  id int [pk, increment]
+  course_id int
+  course_level varchar(255)
+  coordinator varchar(255)
+  batch_start_date date
+  batch_end_date date
+  status varchar(255)
+  deleted_at timestamp
+  created_at timestamp
+  updated_at timestamp
+  note: "table 'batches' contains courses batches information"
+}
+
+
+
+Table courses{
+  id int [pk, increment]
+  name varchar(255)
+  description varchar(255)
+  img varchar(255)
+  fees double
+  prerequisite varchar(255)
+  rating double
+  status varchar(255)
+  deleted_at timestamp
+  created_at timestamp
+  updated_at timestamp
+  note: "table 'courses' contains courses information"
+}
+
+
+
+
+Table modules{
+  id int [pk, increment]
+  name varchar(255)
+  description varchar(255)
+  rating double
+  status varchar(255)
+  deleted_at timestamp
+  created_at timestamp
+  updated_at timestamp
+  note: "table 'modules' contains modules information"
+}
+
+
+Table topics {
+  id int [pk, increment]
+  module_id int
+  title varchar
+  description varchar
+  duration double
+  status varchar
+  deleted_at timestamp
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table course_modules{
+  id int [pk, increment]
+  module_id int
+  course_id int
+  module_index int
+  status varchar(255)
+  deleted_at timestamp
+  created_at timestamp
+  updated_at timestamp
+  note: "table 'course_modules' contains courses and modules information"
+}
+
+
+
+Table staff_role{
+  id int [pk, increment]
+  staff_id int
+  module_id int
+  batch_id int
+  module_index int
+  status varchar(255)
+  deleted_at timestamp
+  created_at timestamp
+  updated_at timestamp
+  note: "table 'staff_role' contains staffs who have been assign to a module information"
+}
+
+
+
+Table staffs{
+  id int [pk, increment]
+  name varchar(255)
+  staff_id varchar(255)
+  user_id varchar(255)
+  contact varchar(255)
+  department varchar(255)
+  status varchar(255)
+  deleted_at timestamp
+  created_at timestamp
+  updated_at timestamp
+  note: "table 'staffs' contains staffs information"
+}
+
+
+
+Table student_results{
+  id int [pk, increment]
+  student_id varchar(255)
+  batch_id int
+  module_id int
+  staff_id varchar(255)
+  marks int
+  status varchar(255)
+  deleted_at timestamp
+  created_at timestamp
+  updated_at timestamp
+  note: "table 'student_results' contains student results information"
+}
+
+
+
+Table users{
+  id int [pk, increment]
+  username varchar(255)
+  email varchar(255)
+  usertype varchar(255)
+  password varchar(255)
+  reset_password_token varchar(255)
+  status varchar(255)
+  deleted_at timestamp
+  created_at timestamp
+  updated_at timestamp
+  note: "table 'users' contains users information"
+}
+
+
+
+Table enquires{
+  id int [pk, increment]
+  first_name varchar(255)
+  last_name varchar(255)
+  email varchar(255)
+  contact varchar(255)
+  title varchar(255)
+  description varchar(255)
+  status varchar(255)
+  deleted_at timestamp
+  created_at timestamp
+  updated_at timestamp
+  note: "table 'enquires' contains student enquires information"
+}
+
+
+
+Table registration{
+  id int [pk, increment]
+  first_name varchar(255)
+  last_name varchar(255)
+  email varchar(255)
+  contact varchar(255)
+  course_id int
+  session varchar(255)
+  centre varchar(255)
+  status varchar(255)
+  deleted_at timestamp
+  created_at timestamp
+  updated_at timestamp
+  note: "table 'registration' contains student registration information"
+}
+
+
+
+Table payment{
+  id int [pk, increment]
+  reg_id int
+  payment_amt varchar(255)
+  payment_due varchar(255)
+  payment_balance varchar(255)
+  payment_date timestamp
+  status varchar(255)
+  deleted_at timestamp
+  created_at timestamp
+  updated_at timestamp
+  note: "table 'payment' contains payment of student registration information"
+}
+
+
+
+Table clearance_form{
+  id int [pk, increment]
+  student_id varchar(255)
+  batch_id int
+  year_completed date
+  director_comment varchar(255)
+  director_approval varchar(255)
+  director_approval_date date
+  status varchar(255)
+  deleted_at timestamp
+  created_at timestamp
+  updated_at timestamp
+  note: "table 'clearance_form' contains student clearance form information"
+}
+
+
+
+
+Table approval_of_clearance_form{
+  id int [pk, increment]
+  clearance_form_id int
+  unit varchar(255)
+  unit_rep varchar(255)
+  approval varchar(255)
+  date_of_approval date
+  remarks varchar(255)
+  status varchar(255)
+  deleted_at timestamp
+  created_at timestamp
+  updated_at timestamp
+  note: "table 'approval_of_clearance_form' contains the approval of student clearance form information"
+}
+
+
+
+Ref: topics.module_id > modules.id
+Ref: payment.reg_id > registration.id  
+Ref: batches.course_id > courses.id
+Ref: staff_role.staff_id > staffs.id
+Ref: staff_role.module_id > modules.id
+Ref: staff_role.batch_id > batches.id
+Ref: staffs.user_id > users.id
+Ref: student_results.student_id > students.id  
+Ref: student_results.batch_id > batches.id
+Ref: student_results.staff_id > staffs.id
+Ref: student_results.module_id > modules.id
+Ref: students.batch_id > batches.id
+Ref: students.user_id > users.id
+Ref: registration.course_id > courses.id  
+Ref: clearance_form.batch_id > batches.id
+Ref: clearance_form.student_id > students.id
+Ref: approval_of_clearance_form.clearance_form_id > clearance_form.id
+Ref: course_modules.module_id > modules.id
+Ref: course_modules.course_id > courses.id

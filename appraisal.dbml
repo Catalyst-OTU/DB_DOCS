@@ -1,0 +1,283 @@
+Project Appraisal {
+  database_type: 'PostgreSQL'
+  Note: '''
+    # Appraisal Management System
+    **Database Documentation**
+  '''
+}
+
+//  TYPE gender_type AS ENUM (
+//   'male'
+//   'female'
+// )
+
+
+ Table appraisal_form {
+  appraisal_form_id int [pk, increment]
+  department varchar(255)
+  grade int
+  positions varchar(255)
+  appraisal_date date
+  staff_id int
+ }
+
+
+
+
+ Table annual_appraisal{
+  annual_appraisal_id int [pk, increment]
+  comment varchar(255)
+  field varchar(255)
+  appraisal_form_id int
+  status int
+  note: "table 'annual_appraisal' contains annual_appraisal information"
+ }
+
+ Table annual_plan {
+  annual_plan_id int [pk, increment]
+  result_areas varchar(255)
+  target varchar(255)
+  resources varchar(255)
+  appraisal_form_id int
+  start_status int
+  submit int
+  annual_plan_status int
+ }
+
+
+
+ Table competency {
+  category varchar(255)
+  sub varchar(255)
+  main varchar(255)
+  weight double
+  competency_id bigint
+ }
+
+ Table competency_details {
+  id int [pk, increment]
+  competency_id int
+  appraisal_form_id int
+  status int
+  grade int
+  submit int
+  disapprove_status int
+  disapprove_comments varchar(255)
+ }
+
+ Table deadline {
+  deadline_type varchar(255)
+  start_date date
+  ending date
+  deadline_id int [pk, increment]
+ }
+
+ Table department_type {
+  id int
+  title varchar(255)
+ }
+
+ Table disapprove_competency_comment {
+  appraisal_form_id int
+  competency_id int
+  comments varchar(255)
+ }
+
+ Table endofyear_review {
+  appraisal_form_id int
+  endofyear_review_id int [pk, increment]
+  performance_details_id bigint
+  end_status int
+  average_per_rating int
+  average_total int
+  average_per_rating_id bigint
+  appraisers_comment_on_workplan varchar(255)
+  training_development_comments varchar(255)
+  submit int
+  endyear_review_status int
+  appraisees_comments_and_plan varchar(255)
+  head_of_divisions_comments varchar(255)
+ }
+
+ Table form_completion {
+  form_completion_id int [pk, increment]
+  appraisal_id int
+  date date
+  status int
+ }
+
+ Table midyear_review {
+  midyear_review_id int [pk, increment]
+  progress_review varchar(255)
+  remarks varchar(255)
+  mid_status int
+  appraisal_form_id int
+  competency varchar(255)
+  submit int
+  midyear_review_status int
+ }
+
+ Table overall_performance {
+  id int [pk, increment]
+  description varchar(255)
+  performance varchar(255)
+ }
+
+ Table overall_assessment {
+  aprpaisal_form_id bigint
+  performance_assessment_score int
+  core_assessment_score int
+  non_core_assessment_score int
+  overall_total_score int
+  overall_performance_rating int
+ }
+
+ Table performance_details {
+  id int [pk, increment]
+  appraisal_form_id int
+  comments varchar(255)
+  status int
+  approved_date date
+  submit int
+  weight varchar(255)
+  final_score varchar(255)
+  performance_details_id int
+  p_a varchar(255)
+ }
+
+ Table reset_password_codes {
+  id int
+  code varchar(255)
+  user_id int
+  user_email varchar(255)
+  status boolean
+  date_d timestamp
+  date_modified timestamp
+ }
+
+ Table reset_password_token {
+  id int
+  user_id int
+  token varchar(255)
+  date_d timestamp
+ }
+
+ Table revoked_tokens {
+  id int
+  jti varchar(255)
+  date_d timestamp
+  date_modified timestamp
+ }
+
+ Table roles {
+  role_id int
+  role_description varchar(255)
+ }
+
+ Table save_annual_plan {
+  result_areas varchar(255)
+  target varchar(255)
+  resources varchar(255)
+  appraisal_form_id int
+ }
+
+ Table staff {
+  staff_id int [pk, increment]
+  first_name varchar(255)
+  last_name varchar(255)
+  other_name varchar(255)
+  supervisor int
+  gender varchar(255)
+  department varchar(255)
+  positions varchar(255)
+  grade int
+  appointment_date date
+  staff_status int
+ }
+
+ Table supervisor_comment {
+  annual_plan_comment varchar(255)
+  midyear_review_comment varchar(255)
+  endofyear_review varchar(255)
+  appraisal_form_id int
+ }
+
+ Table Table1 {
+  id int
+  name varchar(255)
+ }
+
+ Table Table2 {
+  id int
+  name varchar(255)
+ }
+
+ Table training_received {
+  institution varchar(255)
+  date varchar(255)
+  programme varchar(255)
+  appraisal_form_id int
+  submit int
+ }
+
+ Table user_type {
+  id int
+  title varchar(255)
+ }
+
+ Table users {
+  id int [pk, increment] // auto-increment
+  staff_id int
+  email varchar
+  password varchar
+  reset_password_token varchar
+  status varchar
+  created_at timestamp
+  updated_at timestamp
+  user_type_id int
+  department_type_id int
+ }
+
+ Table yearly_details {
+  department varchar(255)
+  grade int
+  position varchar(255)
+  year date
+  staff_id int
+  yearly_details_id int [pk, increment]
+ }
+
+
+
+
+
+
+Ref ann_fk:appraisal_form.appraisal_form_id < annual_plan.appraisal_form_id
+
+Ref ann_app_fk:appraisal_form.appraisal_form_id < annual_appraisal.appraisal_form_id
+
+Ref app1_fk:staff.staff_id < appraisal_form.staff_id
+
+Ref app_f_id_fkey:appraisal_form.appraisal_form_id < overall_assessment.aprpaisal_form_id
+
+Ref app_fid_ff:appraisal_form.appraisal_form_id < disapprove_competency_comment.appraisal_form_id
+
+Ref app_s:appraisal_form.appraisal_form_id < supervisor_comment.appraisal_form_id
+
+Ref appraisal_form_id_fkey3:appraisal_form.appraisal_form_id < competency_details.appraisal_form_id
+
+Ref appraisal_form_id_for_key:appraisal_form.appraisal_form_id < training_received.appraisal_form_id
+
+Ref comp:competency.competency_id < competency_details.competency_id
+
+Ref endfk:performance_details.id < endofyear_review.performance_details_id
+
+Ref performance_fk:overall_performance.id < performance_details.performance_details_id
+
+Ref sup_fk:staff.staff_id < staff.supervisor
+
+Ref users_department_type_id_fkey:department_type.id < users.department_type_id
+
+Ref users_staff_id_fkey:staff.staff_id < users.staff_id
+
+Ref year_fk:staff.staff_id < yearly_details.staff_id
