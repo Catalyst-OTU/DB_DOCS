@@ -24,24 +24,26 @@ Project Appraisal {
 
 
 
- Table annual_appraisal{
-  annual_appraisal_id int [pk, increment]
-  comment varchar(255)
-  field varchar(255)
-  appraisal_form_id int
-  status int
-  note: "table 'annual_appraisal' contains annual_appraisal information"
- }
+//  Table annual_appraisal{
+//   annual_appraisal_id int [pk, increment]
+//   comment varchar(255)
+//   field varchar(255)
+//   appraisal_form_id int
+//   status int
+//   note: "table 'annual_appraisal' contains annual_appraisal information"
+//  }
 
- Table annual_plan {
-  annual_plan_id int [pk, increment]
+
+
+ Table start_of_year {
+  start_of_year_id int [pk, increment]
   result_areas varchar(255)
   target varchar(255)
   resources varchar(255)
   appraisal_form_id int
   start_status int
   submit int
-  annual_plan_status int
+  start_of_year_status int
  }
 
 
@@ -53,6 +55,7 @@ Project Appraisal {
   weight double
   competency_id bigint
  }
+
 
  Table competency_details {
   id int [pk, increment]
@@ -72,10 +75,7 @@ Project Appraisal {
   deadline_id int [pk, increment]
  }
 
- Table department_type {
-  id int
-  title varchar(255)
- }
+
 
  Table disapprove_competency_comment {
   appraisal_form_id int
@@ -174,7 +174,7 @@ Project Appraisal {
   role_description varchar(255)
  }
 
- Table save_annual_plan {
+ Table save_start_of_year {
   result_areas varchar(255)
   target varchar(255)
   resources varchar(255)
@@ -196,21 +196,12 @@ Project Appraisal {
  }
 
  Table supervisor_comment {
-  annual_plan_comment varchar(255)
+  start_of_year_comment varchar(255)
   midyear_review_comment varchar(255)
   endofyear_review varchar(255)
   appraisal_form_id int
  }
 
- Table Table1 {
-  id int
-  name varchar(255)
- }
-
- Table Table2 {
-  id int
-  name varchar(255)
- }
 
  Table training_received {
   institution varchar(255)
@@ -220,23 +211,26 @@ Project Appraisal {
   submit int
  }
 
- Table user_type {
-  id int
-  title varchar(255)
- }
 
  Table users {
-  id int [pk, increment] // auto-increment
+  user_id int [pk, increment] // auto-increment
   staff_id int
   email varchar
   password varchar
+  user_type_id int
   reset_password_token varchar
   status varchar
   created_at timestamp
   updated_at timestamp
-  user_type_id int
-  department_type_id int
  }
+
+
+ Table user_type {
+  user_type_id int
+  user_type varchar(255)
+ }
+
+
 
  Table yearly_details {
   department varchar(255)
@@ -252,9 +246,17 @@ Project Appraisal {
 
 
 
-Ref ann_fk:appraisal_form.appraisal_form_id < annual_plan.appraisal_form_id
+Ref ann_fk:appraisal_form.appraisal_form_id < start_of_year.appraisal_form_id
 
-Ref ann_app_fk:appraisal_form.appraisal_form_id < annual_appraisal.appraisal_form_id
+Ref user_type_fk:user_type.user_type_id < users.user_type_id
+
+Ref users_staff_id_fkey:staff.staff_id < users.staff_id
+
+Ref endofyear_fk:appraisal_form.appraisal_form_id < endofyear_review.appraisal_form_id
+
+Ref midyear_fk:appraisal_form.appraisal_form_id < midyear_review.appraisal_form_id
+
+Ref performance_details_fk:appraisal_form.appraisal_form_id < performance_details.appraisal_form_id
 
 Ref app1_fk:staff.staff_id < appraisal_form.staff_id
 
@@ -275,9 +277,5 @@ Ref endfk:performance_details.id < endofyear_review.performance_details_id
 Ref performance_fk:overall_performance.id < performance_details.performance_details_id
 
 Ref sup_fk:staff.staff_id < staff.supervisor
-
-Ref users_department_type_id_fkey:department_type.id < users.department_type_id
-
-Ref users_staff_id_fkey:staff.staff_id < users.staff_id
 
 Ref year_fk:staff.staff_id < yearly_details.staff_id
